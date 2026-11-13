@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Order request</p><h1>Confirm delivery details</h1></div></section>
+<section class="section"><div class="container cart-layout">
+  <form class="checkout-addresses" action="/checkout" method="post">
+    <div class="section-heading"><div><h2>Choose an address</h2><p>The shop will call before accepting payment.</p></div><a href="/profile">Manage addresses</a></div>
+    {% if addresses %}
+      {% for address in addresses %}
+      <label class="select-address"><input type="radio" name="address_id" value="{{ address.id }}" {% if loop.first %}checked{% endif %} required><span><strong>{{ address.label }} · {{ address.recipient_name }}</strong><small>{{ address.line1 }}, {{ address.city }}, {{ address.state }} - {{ address.pin_code }} · {{ address.mobile }}</small></span></label>
+      {% endfor %}
+      <button class="button primary wide" type="submit">Place order request</button>
+    {% else %}
+      <div class="alert error">Add a delivery address before placing this order.</div><a class="button primary" href="/profile">Add address</a>
+    {% endif %}
+  </form>
+  <aside class="order-summary panel"><h2>Your items</h2>{% for item in items %}<div><span>{{ item.name }} × {{ item.quantity }}</span><strong>{{ (item.final_price * item.quantity) | money }}</strong></div>{% endfor %}<hr><div class="summary-total"><span>Total</span><strong>{{ total | money }}</strong></div></aside>
+</div></section>
+{% endblock %}
+

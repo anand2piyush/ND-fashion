@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-shell owner-auth">
+  <div class="auth-aside"><div><p class="kicker light">Private workspace</p><h1>Manage the shop with clarity.</h1><p>Products, incoming orders, stock, discounts and customer reviews in one place.</p></div></div>
+  <div class="auth-form-wrap">
+    <form class="auth-form" action="/owner/login" method="post">
+      <p class="kicker">Shree NavDurga</p><h2>Owner sign in</h2>
+      {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+      <label>Username<input name="username" required autocomplete="username"></label>
+      <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+      <button class="button primary wide" type="submit">Open dashboard</button>
+      <p class="muted small-text">Credentials are stored in <code>owner_config.py</code>.</p>
+    </form>
+  </div>
+</section>
+{% endblock %}
+

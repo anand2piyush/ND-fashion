@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-shell">
+  <div class="auth-aside">
+    <div><p class="kicker light">Your NavDurga account</p><h1>Every beautiful choice, kept in one place.</h1><p>Save addresses, review products and follow each order from confirmation to delivery.</p></div>
+  </div>
+  <div class="auth-form-wrap">
+    <form class="auth-form" action="/{{ 'register' if mode == 'register' else 'login' }}" method="post">
+      <p class="kicker">{{ "Join us" if mode == "register" else "Welcome back" }}</p>
+      <h2>{{ "Create your account" if mode == "register" else "Sign in to continue" }}</h2>
+      {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+      {% if mode == "register" %}
+      <label>Full name<input name="name" required autocomplete="name" value="{{ form.name if form else '' }}"></label>
+      <label>Mobile number<input name="mobile" required autocomplete="tel" inputmode="numeric" value="{{ form.mobile if form else '' }}"></label>
+      <label>Email address<input type="email" name="email" required autocomplete="email" value="{{ form.email if form else '' }}"></label>
+      {% else %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <label>Email or mobile number<input name="identifier" required autofocus autocomplete="username"></label>
+      {% endif %}
+      <label>Password<input type="password" name="password" required minlength="8" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}"></label>
+      <button class="button primary wide" type="submit">{{ "Create account" if mode == "register" else "Sign in" }}</button>
+      <p class="form-switch">
+        {% if mode == "register" %}Already registered? <a href="/login">Sign in</a>
+        {% else %}New to NavDurga? <a href="/register">Create an account</a>{% endif %}
+      </p>
+    </form>
+  </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section product-page">
+  <div class="container">
+    <div class="breadcrumbs"><a href="/">Home</a> / <a href="/products">Shop</a> / {{ product.category_name }}</div>
+    <div class="product-layout">
+      <div class="gallery">
+        <div class="thumbs">
+          {% for image in images %}
+          <button type="button" class="{% if loop.first %}active{% endif %}" data-gallery-thumb="{{ image.image_url }}">
+            <img src="{{ image.image_url }}" alt="{{ product.name }} view {{ loop.index }}">
+          </button>
+          {% endfor %}
+        </div>
+
+        <!-- {% if instagram_urls %}
+<section class="section instagram-section">
+  <div class="container">
+    <div class="section-heading">
+       <div><p class="kicker">See the drape</p><h2>From our Instagram</h2></div>
+    </div>
+    <div class="instagram-grid instagram-count-{{ instagram_urls|length }}">
+      {% for instagram_url in instagram_urls %}
+      <article class="instagram-embed-card">
+        <iframe
+          src="{{ instagram_url | instagram_embed_url }}"
+          title="{{ product.name }} Instagram post {{ loop.index }}"
+          loading="lazy"
+          scrolling="no"
+          allowtransparency="true"
+          allowfullscreen="true">
+        </iframe>
+        <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer">Open on Instagram ↗</a>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="instagram-note">Instagram media is shown from the original public post. A private or embed-disabled post may not load.</p>
+  </div>
+</section>
+{% endif %} -->
+
+
+
+
+
+        
+        <div class="main-image"><img data-gallery-main src="{{ images[0].image_url if images else '/static/images/product-placeholder.svg' }}" alt="{{ product.name }}"></div>
+      </div>
+      <div class="product-summary">
+        <p class="eyebrow">{{ product.brand }}</p>
+        <h1>{{ product.name }}</h1>
+        <p class="lead">{{ product.short_detail }}</p>
+        <div class="detail-price">
+          <strong>{{ discounted_price | money }}</strong>
+          {% if product.discount_percent %}
+          <del>{{ product.price | money }}</del>
+          <span>{{ product.discount_percent }}% off</span>
+          {% endif %}
+        </div>
+        <p class="tax-note">Inclusive of all taxes</p>
+        <div class="availability {% if product.stock < 1 %}out{% endif %}">
+          {% if product.stock > 0 %}In stock · {{ product.stock }} available{% else %}Currently out of stock{% endif %}
+        </div>
+        <form action="/cart/add/{{ product.id }}" method="post">
+          <div class="quantity-row">
+            <label for="quantity">Quantity</label>
+            <select id="quantity" name="quantity">
+              {% for number in range(1, 6) %}<option>{{ number }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="buy-actions">
+            <button class="button secondary wide" name="action" value="cart" {% if product.stock < 1 %}disabled{% endif %}>Add to bag</button>
+            <button class="button primary wide" name="action" value="buy" {% if product.stock < 1 %}disabled{% endif %}>Buy now</button>
+          </div>
+        </form>
+        <div class="description-box">
+          <h2>Product details</h2>
+          <p>{{ product.description }}</p>
+          <dl>
+            <div><dt>Category</dt><dd>{{ product.category_name }}</dd></div>
+            <div><dt>Order process</dt><dd>Confirmed by phone before payment</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% if instagram_urls %}
+<section class="section instagram-section">
+  <div class="container">
+    <div class="section-heading">
+      <div><p class="kicker">See the drape</p><h2>From our Instagram</h2></div>
+    </div>
+    <div class="instagram-grid instagram-count-{{ instagram_urls|length }}">
+      {% for instagram_url in instagram_urls %}
+      <article class="instagram-embed-card">
+        <iframe
+          src="{{ instagram_url | instagram_embed_url }}"
+          title="{{ product.name }} Instagram post {{ loop.index }}"
+          loading="lazy"
+          scrolling="no"
+          allowtransparency="true"
+          allowfullscreen="true">
+        </iframe>
+        <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer">Open on Instagram ↗</a>
+      </article>
+      {% endfor %}
+    <!-- </div>
+    <p class="instagram-note">Instagram media is shown from the original public post. A private or embed-disabled post may not load.</p>
+  </div> -->
+</section>
+{% endif %} 
+
+
+
+<section class="section soft-section" id="reviews">
+  <div class="container review-layout">
+    <div>
+      <p class="kicker">Customer notes</p>
+      <h2>Reviews</h2>
+      {% if reviews %}
+        <div class="review-list">
+          {% for review in reviews %}
+          <article class="review">
+            <div><strong>{{ review.customer_name }}</strong><span>{{ "★" * review.rating }}{{ "☆" * (5-review.rating) }}</span></div>
+            <p>{{ review.comment }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No reviews yet. Be the first to share your experience.</p>
+      {% endif %}
+    </div>
+    <form class="panel review-form" action="/products/{{ product.id }}/reviews" method="post">
+      <h3>Write a review</h3>
+      {% if customer %}
+      <label>Rating
+        <select name="rating">
+          <option value="5">5 - Excellent</option><option value="4">4 - Very good</option>
+          <option value="3">3 - Good</option><option value="2">2 - Fair</option><option value="1">1 - Poor</option>
+        </select>
+      </label>
+      <label>Your review<textarea name="comment" rows="5" required maxlength="1000"></textarea></label>
+      <button class="button primary" type="submit">Submit review</button>
+      {% else %}
+      <p>Please sign in to add a review.</p><a class="button primary" href="/login?next=/products/{{ product.id }}">Sign in</a>
+      {% endif %}
+    </form>
+  </div>
+</section>
+{% endblock %}

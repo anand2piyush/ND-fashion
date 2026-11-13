@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Owner workspace</p><h1>{{ "Edit product" if product else "Add a new product" }}</h1></div></section>
+<section class="section"><div class="container narrow">
+  <form class="panel form-grid product-form" action="/owner/products/save" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="product_id" value="{{ product.id if product else 0 }}">
+    <div class="panel-heading"><h2>Product information</h2><p>Add clear details and up to six product images.</p></div>
+    {% if request.query_params.get('error') == 'instagram' %}
+    <div class="alert error full-field">Enter a direct public Instagram post or reel URL, such as <code>instagram.com/p/...</code> or <code>instagram.com/reel/...</code>.</div>
+    {% endif %}
+    <label class="full-field">Product name<input name="name" required value="{{ product.name if product else '' }}" placeholder="e.g. Rani Pink Banarasi Silk Saree"></label>
+    <label>Brand<input name="brand" required value="{{ product.brand if product else 'Shree NavDurga' }}"></label>
+    <label>Category<select name="category_id">{% for category in categories %}<option value="{{ category.id }}" {% if product and product.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>{% endfor %}</select></label>
+    <label class="full-field">One-line detail<input name="short_detail" required maxlength="180" value="{{ product.short_detail if product else '' }}"></label>
+    <label class="full-field">Description<textarea name="description" required rows="6">{{ product.description if product else '' }}</textarea></label>
+    <label>Original price (₹)<input type="number" name="price" min="0" step="1" required value="{{ product.price if product else '' }}"></label>
+    <label>Discount percent<input type="number" name="discount_percent" min="0" max="90" value="{{ product.discount_percent if product else 0 }}"></label>
+    <label>Stock quantity<input type="number" name="stock" min="0" value="{{ product.stock if product else 0 }}"></label>
+    <label>Product images<input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple><small>JPG, PNG or WebP. Maximum six images per upload.</small></label>
+    <div class="panel-heading instagram-heading"><h2>Instagram media</h2><p>Add up to two public post or reel URLs. Instagram will load the original images or video on the product page.</p></div>
+    <label class="full-field">Instagram post or reel URL 1<input type="url" name="instagram_url_1" value="{{ product.instagram_url_1 if product and product.instagram_url_1 else '' }}" placeholder="https://www.instagram.com/p/.../"></label>
+    <label class="full-field">Instagram post or reel URL 2<input type="url" name="instagram_url_2" value="{{ product.instagram_url_2 if product and product.instagram_url_2 else '' }}" placeholder="https://www.instagram.com/reel/.../"><small>The Instagram account must be public and allow embeds.</small></label>
+    <label class="checkbox-label"><input type="checkbox" name="is_new" value="1" {% if not product or product.is_new %}checked{% endif %}> Show in new arrivals</label>
+    <label class="checkbox-label"><input type="checkbox" name="is_active" value="1" {% if not product or product.is_active %}checked{% endif %}> Product is visible</label>
+    <div class="full-field form-actions"><button class="button primary" type="submit">Save product</button><a class="button text" href="/owner#products">Cancel</a></div>
+  </form>
+</div></section>
+{% endblock %}

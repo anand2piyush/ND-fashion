@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <defs>
+    <linearGradient id="fabric" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8f1d43"/>
+      <stop offset="1" stop-color="#e9a7bc"/>
+    </linearGradient>
+    <pattern id="motif" width="80" height="80" patternUnits="userSpaceOnUse">
+      <circle cx="40" cy="40" r="8" fill="#f6d68b" opacity=".75"/>
+      <path d="M40 18 50 40 40 62 30 40Z" fill="none" stroke="#f6d68b" stroke-width="2" opacity=".55"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="1000" fill="#f5eee8"/>
+  <path d="M115 65h570l-70 870H185Z" fill="url(#fabric)"/>
+  <path d="M115 65h570l-70 870H185Z" fill="url(#motif)"/>
+  <path d="M153 800h494l-10 112H163Z" fill="#c49a43" opacity=".9"/>
+  <path d="M170 825h460M168 855h464M166 885h468" stroke="#fff2c7" stroke-width="7" opacity=".7"/>
+  <text x="400" y="970" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#5e2637">Shree NavDurga Vastralaya</text>
+</svg>

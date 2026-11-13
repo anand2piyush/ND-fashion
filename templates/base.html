@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Shree NavDurga Vastralaya - sarees and Indian wear for every celebration.">
+  <title>{{ title }} | Shree NavDurga Vastralaya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/app.js" defer></script>
+</head>
+<body>
+  <div class="announcement">Authentic Indian wear · Personal order confirmation · Thoughtfully selected</div>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <span class="brand-mark">न</span>
+        <span><strong>Shree NavDurga</strong><small>Vastralaya</small></span>
+      </a>
+      <button class="menu-button" type="button" aria-label="Open menu" data-menu-button>☰</button>
+      <nav class="main-nav" data-menu>
+        <a href="/">Home</a>
+        <a href="/products">Shop</a>
+        {% if customer %}
+          <a href="/orders">My Orders</a>
+          <a href="/profile">Hello, {{ customer.name.split(' ')[0] }}</a>
+          <a class="cart-link" href="/cart">Bag <span>{{ cart_count }}</span></a>
+          <form action="/logout" method="post"><button class="link-button">Logout</button></form>
+        {% else %}
+          <a href="/login">Sign in</a>
+          <a class="cart-link" href="/cart">Bag <span>0</span></a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="/">
+          <span class="brand-mark">न</span>
+          <span><strong>Shree NavDurga</strong><small>Vastralaya</small></span>
+        </a>
+        <p>Indian sarees and clothing selected with care for celebrations and everyday grace.</p>
+      </div>
+      <div>
+        <h3>Shop</h3>
+        <a href="/products?category=banarasi">Banarasi</a>
+        <a href="/products?category=silk">Silk</a>
+        <a href="/products?category=cotton">Cotton</a>
+      </div>
+      <div>
+        <h3>Account</h3>
+        <a href="/profile">My profile</a>
+        <a href="/orders">Track orders</a>
+        <a href="/owner/login">Owner portal</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">© 2026 Shree NavDurga Vastralaya</div>
+  </footer>
+</body>
+</html>
+

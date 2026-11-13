@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Your purchases</p><h1>My orders</h1></div></section>
+<section class="section"><div class="container account-grid">
+  <aside class="account-nav"><a href="/profile">Profile & addresses</a><a class="active" href="/orders">My orders</a><a href="/cart">Shopping bag</a></aside>
+  <div class="order-list">
+    {% for order in orders %}
+    <a class="order-card" href="/orders/{{ order.id }}"><div><span class="status-pill">{{ order.status }}</span><h2>{{ order.order_number }}</h2><p>{{ order.item_count }} item{% if order.item_count != 1 %}s{% endif %} · {{ order.created_at[:10] }}</p></div><div><strong>{{ order.subtotal | money }}</strong><span>View details →</span></div></a>
+    {% else %}
+    <div class="empty-state"><h2>No orders yet</h2><p>Your placed orders will appear here.</p><a class="button primary" href="/products">Browse collection</a></div>
+    {% endfor %}
+  </div>
+</div></section>
+{% endblock %}
+

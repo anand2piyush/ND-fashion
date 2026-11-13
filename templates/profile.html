@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Your account</p><h1>Profile & addresses</h1></div></section>
+<section class="section">
+  <div class="container account-grid">
+    <aside class="account-nav"><a class="active" href="/profile">Profile & addresses</a><a href="/orders">My orders</a><a href="/cart">Shopping bag</a></aside>
+    <div>
+      {% if request.query_params.get('saved') %}<div class="alert success">Profile updated.</div>{% endif %}
+      {% if request.query_params.get('address_saved') %}<div class="alert success">Address saved.</div>{% endif %}
+      {% if request.query_params.get('error') == 'limit' %}<div class="alert error">You can save up to 3 addresses.</div>{% endif %}
+      {% if request.query_params.get('error') == 'duplicate' %}<div class="alert error">That email or mobile number belongs to another account.</div>{% endif %}
+      <form class="panel form-grid" action="/profile" method="post">
+        <div class="panel-heading"><h2>Personal details</h2><p>Your email and mobile number must be unique.</p></div>
+        <label>Full name<input name="name" value="{{ customer.name }}" required></label>
+        <label>Mobile number<input name="mobile" value="{{ customer.mobile }}" required></label>
+        <label class="full-field">Email address<input type="email" name="email" value="{{ customer.email }}" required></label>
+        <div class="full-field"><button class="button primary" type="submit">Save profile</button></div>
+      </form>
+      <div class="subsection-heading"><div><h2>Saved addresses</h2><p>{{ addresses|length }} of {{ address_limit }} saved</p></div></div>
+      <div class="address-grid">
+        {% for address in addresses %}
+        <article class="address-card">
+          <span class="address-label">{{ address.label }}</span>
+          <h3>{{ address.recipient_name }}</h3>
+          <p>{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}<br>{{ address.city }}, {{ address.state }} - {{ address.pin_code }}<br>{{ address.mobile }}</p>
+          <form action="/addresses/{{ address.id }}/delete" method="post"><button class="link-button danger" type="submit">Remove</button></form>
+        </article>
+        {% endfor %}
+      </div>
+      {% if addresses|length < 3 %}
+      <form class="panel form-grid address-form" action="/addresses" method="post">
+        <div class="panel-heading"><h2>Add an address</h2><p>Choose Home, Office or Other.</p></div>
+        <label>Address type<select name="label"><option>Home</option><option>Office</option><option>Other</option></select></label>
+        <label>Recipient name<input name="recipient_name" required value="{{ customer.name }}"></label>
+        <label>Mobile number<input name="mobile" required value="{{ customer.mobile }}"></label>
+        <label>PIN code<input name="pin_code" required inputmode="numeric" pattern="[0-9]{6}"></label>
+        <label class="full-field">Address line 1<input name="line1" required placeholder="House, building, street"></label>
+        <label class="full-field">Address line 2<input name="line2" placeholder="Area, landmark (optional)"></label>
+        <label>City<input name="city" required></label><label>State<input name="state" required></label>
+        <div class="full-field"><button class="button primary" type="submit">Save address</button></div>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+

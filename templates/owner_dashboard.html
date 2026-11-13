@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="owner-header">
+  <div class="container"><div><p class="kicker light">Owner workspace</p><h1>Shop dashboard</h1></div><a class="button light-button" href="/owner/products/new">+ Add new product</a></div>
+</section>
+<section class="section owner-section">
+  <div class="container">
+    <div class="stat-grid">
+      <div><span>Total orders</span><strong>{{ stats.orders }}</strong></div>
+      <div><span>Needs attention</span><strong>{{ stats.pending }}</strong></div>
+      <div><span>Active products</span><strong>{{ stats.products }}</strong></div>
+      <div><span>Customers</span><strong>{{ stats.customers }}</strong></div>
+    </div>
+    <nav class="owner-tabs"><a href="#orders">Orders</a><a href="#products">Products</a><a href="#reviews">Reviews</a></nav>
+
+    <div class="owner-block" id="orders">
+      <div class="section-heading"><div><p class="kicker">Incoming requests</p><h2>Orders</h2></div></div>
+      <div class="owner-cards">
+        {% for order in orders %}
+        <article class="owner-order">
+          <div class="owner-order-top"><div><span class="status-pill">{{ order.status }}</span><h3>{{ order.order_number }}</h3><p>{{ order.customer_name }} · <a href="tel:{{ order.customer_mobile }}">{{ order.customer_mobile }}</a></p></div><strong>{{ order.subtotal | money }}</strong></div>
+          <form action="/owner/orders/{{ order.id }}" method="post">
+            <label>Status<select name="status">{% for status in statuses %}<option {% if status == order.status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></label>
+            <label>Customer update<input name="owner_note" value="{{ order.owner_note or '' }}" placeholder="e.g. Payment confirmed; dispatch tomorrow"></label>
+            <button class="button small primary">Update order</button>
+          </form>
+          <a class="small-link" href="/track/{{ order.tracking_token }}" target="_blank">Open delivery tracking link ↗</a>
+        </article>
+        {% else %}<p class="muted">No orders have been placed yet.</p>{% endfor %}
+      </div>
+    </div>
+
+    <div class="owner-block" id="products">
+      <div class="section-heading"><div><p class="kicker">Catalogue</p><h2>Products</h2></div><a class="button secondary" href="/owner/products/new">Add product</a></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Discount</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+        <tbody>{% for product in products %}<tr><td><strong>{{ product.name }}</strong><small>{{ product.brand }}</small></td><td>{{ product.category_name }}</td><td>{{ product.price | money }}</td><td>{{ product.discount_percent }}%</td><td>{{ product.stock }}</td><td>{{ "Active" if product.is_active else "Hidden" }}</td><td><a href="/owner/products/{{ product.id }}/edit">Edit</a></td></tr>{% endfor %}</tbody>
+      </table></div>
+    </div>
+
+    <div class="owner-block" id="reviews">
+      <div class="section-heading"><div><p class="kicker">Moderation</p><h2>Customer reviews</h2></div></div>
+      <div class="review-list">
+        {% for review in reviews %}
+        <article class="review owner-review"><div><strong>{{ review.customer_name }} on {{ review.product_name }}</strong><span>{{ "★" * review.rating }}{{ "☆" * (5-review.rating) }}</span></div><p>{{ review.comment }}</p><form action="/owner/reviews/{{ review.id }}/toggle" method="post"><button class="button small secondary">{{ "Hide from website" if review.is_visible else "Show on website" }}</button></form></article>
+        {% else %}<p class="muted">No customer reviews yet.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

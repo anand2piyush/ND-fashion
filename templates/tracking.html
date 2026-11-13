@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="tracking-page"><div class="tracking-card">
+  <span class="brand-mark large">न</span>
+  {% if order %}<p class="kicker">Order tracking</p><h1>{{ order.order_number }}</h1><div class="tracking-status">{{ order.status }}</div><p>{{ order.item_count }} item{% if order.item_count != 1 %}s{% endif %} · Last updated {{ order.updated_at[:16] }}</p><small>This page can be shared with the delivery partner. Customer address and payment information remain private.</small>
+  {% else %}<h1>Tracking link not found</h1><p>Please check the link and try again.</p>{% endif %}
+</div></section>
+{% endblock %}
+

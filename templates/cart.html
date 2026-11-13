@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Almost yours</p><h1>Your shopping bag</h1></div></section>
+<section class="section">
+  <div class="container">
+    {% if items %}
+    <div class="cart-layout">
+      <div class="cart-items">
+        {% for item in items %}
+        <article class="cart-item">
+          <img src="{{ item.image_url or '/static/images/product-placeholder.svg' }}" alt="{{ item.name }}">
+          <div class="cart-item-info"><h2><a href="/products/{{ item.product_id }}">{{ item.name }}</a></h2><p>{{ item.final_price | money }} each</p>
+            <form action="/cart/{{ item.id }}" method="post"><label>Qty <input type="number" name="quantity" min="0" max="10" value="{{ item.quantity }}"></label><button class="button small secondary">Update</button></form>
+          </div>
+          <strong>{{ (item.final_price * item.quantity) | money }}</strong>
+        </article>
+        {% endfor %}
+      </div>
+      <aside class="order-summary panel">
+        <h2>Order summary</h2><div><span>Subtotal</span><strong>{{ total | money }}</strong></div><div><span>Delivery</span><span>Confirmed by phone</span></div><hr><div class="summary-total"><span>Total</span><strong>{{ total | money }}</strong></div>
+        <a class="button primary wide" href="/checkout">Continue to checkout</a><p>No online payment yet. The shop will call you to confirm.</p>
+      </aside>
+    </div>
+    {% else %}
+    <div class="empty-state"><h2>Your bag is waiting</h2><p>Explore our latest sarees and Indian wear.</p><a class="button primary" href="/products">Start shopping</a></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+

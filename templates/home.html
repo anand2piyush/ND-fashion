@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="kicker">Tradition, beautifully worn</p>
+      <h1>Sarees for moments you will remember.</h1>
+      <p>Discover handpicked silks, festive Banarasi weaves, breathable cottons and contemporary Indian wear.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="/products">Explore collection</a>
+        <a class="button text" href="#new-arrivals">See new arrivals →</a>
+      </div>
+      <div class="trust-row">
+        <span><strong>Curated</strong> quality</span>
+        <span><strong>Personal</strong> confirmation</span>
+        <span><strong>Easy</strong> order tracking</span>
+      </div>
+    </div>
+    <div class="hero-art" aria-label="Decorative saree display">
+      <div class="sun"></div>
+      <div class="fabric fabric-one"></div>
+      <div class="fabric fabric-two"></div>
+      <div class="hero-seal"><span>शुभ</span><small>Shree NavDurga</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <div><p class="kicker">Find your drape</p><h2>Shop by collection</h2></div>
+      <a href="/products">View all →</a>
+    </div>
+    <div class="category-grid">
+      {% for category in categories %}
+      <a class="category-card category-{{ loop.index }}" href="/products?category={{ category.slug }}">
+        <span>{{ "%02d" | format(loop.index) }}</span>
+        <h3>{{ category.name }}</h3>
+        <p>{{ category.product_count }} piece{% if category.product_count != 1 %}s{% endif %}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section soft-section" id="new-arrivals">
+  <div class="container">
+    <div class="section-heading">
+      <div><p class="kicker">Freshly selected</p><h2>New arrivals</h2></div>
+      <a href="/products">Shop all →</a>
+    </div>
+    <div class="product-grid">
+      {% for product in products %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="story-strip">
+  <div class="container story-grid">
+    <div><p class="kicker light">Our promise</p><h2>From our shop to your wardrobe, with a human touch.</h2></div>
+    <p>Place your order online. Our shop will call to confirm product availability, payment and delivery details before dispatch.</p>
+  </div>
+</section>
+{% endblock %}

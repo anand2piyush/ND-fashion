@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><p class="kicker">Order {{ order.order_number }}</p><h1>{{ order.status }}</h1><p>Placed on {{ order.created_at[:10] }}</p></div></section>
+<section class="section"><div class="container narrow">
+  {% if request.query_params.get('placed') %}<div class="alert success"><strong>Order request placed.</strong> The shop owner will call you for verification and payment details.</div>{% endif %}
+  {% if order.status == "Cancelled" %}
+  <div class="alert error"><strong>This order was cancelled.</strong>{% if order.owner_note %} {{ order.owner_note }}{% endif %}</div>
+  {% else %}
+  <div class="tracking-steps">
+    {% set current_index = statuses.index(order.status) if order.status in statuses else 0 %}
+    {% for status in statuses[:6] %}<div class="{% if loop.index0 <= current_index %}done{% endif %}"><span>{{ loop.index }}</span><small>{{ status }}</small></div>{% endfor %}
+  </div>
+  {% endif %}
+  <div class="detail-columns">
+    <div class="panel"><h2>Items</h2>{% for item in items %}<div class="line-item"><span>{{ item.product_name }} × {{ item.quantity }}</span><strong>{{ (item.unit_price * item.quantity) | money }}</strong></div>{% endfor %}<hr><div class="line-item total"><span>Total</span><strong>{{ order.subtotal | money }}</strong></div></div>
+    <div class="panel"><h2>Delivery address</h2><p><strong>{{ address.recipient_name }}</strong><br>{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}<br>{{ address.city }}, {{ address.state }} - {{ address.pin_code }}<br>{{ address.mobile }}</p>{% if order.owner_note %}<h3>Shop update</h3><p>{{ order.owner_note }}</p>{% endif %}<a href="/track/{{ order.tracking_token }}">Public tracking link →</a></div>
+  </div>
+</div></section>
+{% endblock %}

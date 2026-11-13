@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero compact">
+  <div class="container">
+    <p class="kicker">The collection</p>
+    <h1>Find your perfect saree</h1>
+    <p>Browse by weave, occasion or style.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <form class="catalog-tools" action="/products" method="get">
+      <label class="search-field">
+        <span>Search</span>
+        <input type="search" name="q" value="{{ q }}" placeholder="Search sarees, brands and styles">
+      </label>
+      <label>
+        <span>Category</span>
+        <select name="category">
+          <option value="">All categories</option>
+          {% for category in categories %}
+          <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="button primary" type="submit">Find products</button>
+    </form>
+    <div class="result-count">{{ products|length }} product{% if products|length != 1 %}s{% endif %} found</div>
+    {% if products %}
+    <div class="product-grid">
+      {% for product in products %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><h2>No matching products</h2><p>Try another search or clear the category filter.</p><a class="button primary" href="/products">View everything</a></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
